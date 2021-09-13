@@ -10,7 +10,7 @@
       "dom.iterable",
       "esnext"
     ],
-    "module": "esnext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "noEmit": true,
     "noEmitOnError": true,
@@ -28,8 +28,8 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/components/*": [
-        "src/components/*"
+      "@/events/*": [
+        "src/events/*"
       ]
     }
   },
