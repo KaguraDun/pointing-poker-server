@@ -21,7 +21,6 @@
     "jest": true
   },
   "extends": [
-    "airbnb",
     "airbnb-typescript",
     "plugin:jest/recommended",
     "prettier"
