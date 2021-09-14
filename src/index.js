@@ -24,9 +24,16 @@ const io = new Server(server);
 
 io.on('connection', (socket) => {
   console.log('User connected', socket.id);
+  let messageKey = 0;
 
-  socket.on(ChatEvents.SEND_MESSAGE_FROM_CLIENT, (message) => {
-    io.emit(ChatEvents.GET_MESSAGE_FROM_SERVER, message);
+  socket.on(ChatEvents.SEND_MESSAGE_FROM_CLIENT, (messageText) => {
+    messageKey += 1;
+
+    io.emit(ChatEvents.GET_MESSAGE_FROM_SERVER, {
+      messageID: messageKey,
+      text: messageText,
+      userID: socket.id,
+    });
   });
 
   socket.on('disconnect', () => {
