@@ -2,32 +2,34 @@ import crypto from 'crypto';
 
 class PokerRooms {
   constructor() {
-    this.rooms = [];
+    this.rooms = {};
   }
 
-  create(dealerData) {
+  create(dealerData, userID) {
+    const ID = crypto.randomBytes(10).toString('hex');
     const roomData = {
-      ID: crypto.randomBytes(10).toString('hex'),
-      owner: dealerData,
-      users: [],
+      ID,
+      owner: { ...dealerData, ID: userID },
+      users: {},
       settings: {},
     };
-
-    this.rooms.push(roomData);
+    this.rooms[ID] = roomData;
     return roomData;
   }
 
   close(roomID) {
-    this.rooms = this.rooms.filter((room) => room.ID !== roomID);
+    delete this.rooms[roomID];
   }
 
   getRoomData(roomID) {
-    return this.rooms.filter((room) => room.ID === roomID);
+    return this.rooms[roomID];
   }
 
-  addUser(userData) {
+  }
+
+  addUser(userData, userID, roomID) {
     const user = {
-      ID: userData.ID,
+      ID: userID,
       image: userData.image,
       name: userData.name,
       surname: userData.surname,
@@ -35,12 +37,11 @@ class PokerRooms {
       role: userData.role,
     };
 
-    this.rooms.users.push(user);
+    this.rooms[roomID].users[userID] = user;
   }
 
   deleteUser(roomID, userID) {
-    const currentRoom = this.rooms.find((ID) => ID === roomID);
-    currentRoom.users = currentRoom.users.filter((ID) => userID !== ID);
+    delete this.rooms[roomID].users[userID];
   }
 }
 
