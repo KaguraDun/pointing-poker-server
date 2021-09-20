@@ -25,6 +25,9 @@ class PokerRooms {
     return this.rooms[roomID];
   }
 
+  checkIfRoomExist(roomID) {
+    if (this.rooms[roomID]) return true;
+    return false;
   }
 
   addUser(userData, userID, roomID) {
