@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
   console.log('User connected', socket.id);
 
   socket.on(RoomEvents.CREATE_ROOM, (dealerData) => {
-    const roomData = pokerRooms.create(dealerData);
+    const roomData = pokerRooms.create(dealerData, socket.id);
     io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
   });
 
