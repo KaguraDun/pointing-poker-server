@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import ChatEvents from './events/chat';
 import RoomEvents from './events/room';
 import PokerRooms from './PokerRooms';
+import UserEvents from './events/user';
 
 require('dotenv').config();
 
@@ -33,8 +34,25 @@ io.on('connection', (socket) => {
     io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
   });
 
-  socket.on(RoomEvents.CONNECT_TO_ROOM, (userData) => {
-    pokerRooms.addUser(userData);
+  socket.on(RoomEvents.GET_ROOM_STATUS_FROM_CLIENT, (roomID) => {
+    io.emit(
+      RoomEvents.GET_ROOM_STATUS_FROM_SERVER,
+      pokerRooms.checkIfRoomExist(roomID)
+    );
+  });
+
+  socket.on(RoomEvents.CONNECT_TO_ROOM, (roomID) => {
+    const roomData = pokerRooms.getRoomData(roomID);
+    io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
+  });
+
+  socket.on(UserEvents.ADD_USER_FROM_CLIENT, ({ userData, roomID }) => {
+    pokerRooms.addUser(userData, socket.id, roomID);
+  });
+
+  socket.on(RoomEvents.GET_ROOM_FROM_CLIENT, (roomID) => {
+    const roomData = pokerRooms.getRoomData(roomID);
+    io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
   });
 
   socket.on(RoomEvents.DISCONNECT_FROM_ROOM, (userID) => {
