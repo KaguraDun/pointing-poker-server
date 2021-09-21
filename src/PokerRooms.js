@@ -12,6 +12,7 @@ class PokerRooms {
       owner: { ...dealerData, ID: userID },
       users: {},
       settings: {},
+      message: '',
     };
     this.rooms[ID] = roomData;
     return roomData;
@@ -45,6 +46,10 @@ class PokerRooms {
 
   deleteUser(roomID, userID) {
     delete this.rooms[roomID].users[userID];
+  }
+
+  changeMessage(roomID, text) {
+    this.rooms[roomID].message = text;
   }
 }
 
