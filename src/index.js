@@ -8,8 +8,6 @@ import RoomEvents from './events/room';
 import PokerRooms from './PokerRooms';
 import UserEvents from './events/user';
 
-require('dotenv').config();
-
 const port = process.env.PORT || 3000;
 const app = express();
 
