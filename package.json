@@ -2,7 +2,7 @@
   "name": "pointing-poker-server",
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
-    "build": "tsc",
+    "build": "nodemon --exec babel-node src/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx .",
     "test": "jest",
