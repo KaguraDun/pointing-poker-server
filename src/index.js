@@ -10,7 +10,7 @@ import UserEvents from './events/user';
 
 require('dotenv').config();
 
-const port = process.env.PORT || process.env.SERVER_PORT;
+const port = process.env.PORT || 3000;
 const app = express();
 
 app
@@ -60,7 +60,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on(RoomEvents.CLOSE_ROOM, (roomID) => {
-    pokerRooms.closeRoom(roomID);
+    pokerRooms.close(roomID);
   });
 
   let messageKey = 0;
