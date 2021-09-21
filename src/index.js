@@ -10,7 +10,7 @@ import UserEvents from './events/user';
 
 require('dotenv').config();
 
-const port = process.env.SERVER_PORT;
+const port = process.env.PORT || process.env.SERVER_PORT;
 const app = express();
 
 app
