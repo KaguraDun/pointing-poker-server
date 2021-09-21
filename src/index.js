@@ -45,7 +45,9 @@ io.on('connection', (socket) => {
   });
 
   socket.on(UserEvents.ADD_USER_FROM_CLIENT, ({ userData, roomID }) => {
-    pokerRooms.addUser(userData, socket.id, roomID);
+    const userID = socket.id;
+    pokerRooms.addUser(userData, userID, roomID);
+    io.emit(RoomEvents.USER_CONNECTED, { roomID, userID });
   });
 
   socket.on(RoomEvents.GET_ROOM_FROM_CLIENT, (roomID) => {
@@ -53,8 +55,12 @@ io.on('connection', (socket) => {
     io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
   });
 
-  socket.on(RoomEvents.DISCONNECT_FROM_ROOM, (userID) => {
-    pokerRooms.deleteUser(userID);
+  socket.on(RoomEvents.SET_ROOM_MESSAGE_FROM_CLIENT, ({ roomID, text }) => {
+    pokerRooms.changeMessage(roomID, text);
+  });
+
+  socket.on(RoomEvents.DISCONNECT_FROM_ROOM, ({ roomID, userID }) => {
+    pokerRooms.deleteUser(roomID, userID);
   });
 
   socket.on(RoomEvents.CLOSE_ROOM, (roomID) => {
