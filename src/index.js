@@ -59,6 +59,8 @@ io.on('connection', (socket) => {
     pokerRooms.changeMessage(roomID, text);
   });
 
+  socket.on(RoomEvents.DISCONNECT_FROM_ROOM, ({ roomID, userID }) => {
+    pokerRooms.deleteUser(roomID, userID);
   });
 
   socket.on(RoomEvents.CLOSE_ROOM, (roomID) => {
