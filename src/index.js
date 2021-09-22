@@ -70,6 +70,7 @@ io.on('connection', (socket) => {
 
   socket.on(RoomEvents.CLOSE_ROOM, (roomID) => {
     pokerRooms.close(roomID);
+    io.emit(RoomEvents.ROOM_CLOSED, roomID);
   });
 
   let messageKey = 0;
