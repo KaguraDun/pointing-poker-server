@@ -13,6 +13,7 @@ class PokerRooms {
       users: {},
       settings: {},
       message: '',
+      isStarted: false,
     };
     this.rooms[ID] = roomData;
     return roomData;
@@ -50,6 +51,10 @@ class PokerRooms {
 
   changeMessage(roomID, text) {
     this.rooms[roomID].message = text;
+  }
+
+  startGame(roomID) {
+    this.rooms[roomID].isStarted = true;
   }
 }
 
