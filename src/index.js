@@ -63,8 +63,14 @@ io.on('connection', (socket) => {
     pokerRooms.deleteUser(roomID, userID);
   });
 
+  socket.on(RoomEvents.START_GAME, (roomID) => {
+    pokerRooms.startGame(roomID);
+    io.emit(RoomEvents.GAME_BEGUN, roomID);
+  });
+
   socket.on(RoomEvents.CLOSE_ROOM, (roomID) => {
     pokerRooms.close(roomID);
+    io.emit(RoomEvents.ROOM_CLOSED, roomID);
   });
 
   let messageKey = 0;
