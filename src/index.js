@@ -73,6 +73,10 @@ io.on('connection', (socket) => {
     io.emit(RoomEvents.ROOM_CLOSED, roomID);
   });
 
+  socket.on(RoomEvents.UPDATE_SETTINGS, ({ roomID, newSettings }) => {
+    pokerRooms.updateSettings(roomID, newSettings);
+  });
+
   let messageKey = 0;
 
   socket.on(ChatEvents.SEND_MESSAGE_FROM_CLIENT, (messageText) => {
