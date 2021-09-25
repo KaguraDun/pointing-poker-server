@@ -14,6 +14,7 @@ class PokerRooms {
       ID,
       owner: { ...dealerData, ID: userID },
       users: {},
+      issues: {},
       settings: {
         dealerAsPlayer: false,
         decks: [
@@ -90,6 +91,25 @@ class PokerRooms {
     if (!roomID) return;
 
     Object.assign(this.rooms[roomID]?.settings, newSettings);
+  }
+
+  addIssue(roomID, issue) {
+    if (!roomID) return;
+
+    const issueID = crypto.randomBytes(5).toString('hex');
+
+    const issueData = {
+      ...issue,
+      ID: issueID,
+    };
+
+    this.rooms[roomID].issues[issueID] = issueData;
+  }
+
+  deleteIssue(roomID, issueID) {
+    if (!roomID) return;
+
+    delete this.rooms[roomID].issues[issueID];
   }
 }
 export default PokerRooms;

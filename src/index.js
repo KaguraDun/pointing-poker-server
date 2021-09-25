@@ -77,6 +77,14 @@ io.on('connection', (socket) => {
     pokerRooms.updateSettings(roomID, newSettings);
   });
 
+  socket.on(RoomEvents.ADD_ISSUE, ({ roomID, issue }) => {
+    pokerRooms.addIssue(roomID, issue);
+  });
+
+  socket.on(RoomEvents.DELETE_ISSUE, ({ roomID, issueID }) => {
+    pokerRooms.deleteIssue(roomID, issueID);
+  });
+
   let messageKey = 0;
 
   socket.on(ChatEvents.SEND_MESSAGE_FROM_CLIENT, (messageText) => {
