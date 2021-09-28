@@ -8,11 +8,11 @@ class PokerRooms {
     this.rooms = {};
   }
 
-  create(dealerData, userID) {
-    const ID = crypto.randomBytes(10).toString('hex');
+  create(dealerData) {
+    const roomID = crypto.randomBytes(10).toString('hex');
     const roomData = {
-      ID,
-      owner: { ...dealerData, ID: userID },
+      ID: roomID,
+      owner: '',
       users: {},
       issues: {},
       settings: {
@@ -31,7 +31,12 @@ class PokerRooms {
       message: '',
       isStarted: false,
     };
-    this.rooms[ID] = roomData;
+    this.rooms[roomID] = roomData;
+
+    const dealerID = this.addUser(roomID, dealerData);
+
+    this.rooms[roomID].owner = dealerID;
+
     return roomData;
   }
 
@@ -54,8 +59,9 @@ class PokerRooms {
     return false;
   }
 
-  addUser(userData, userID, roomID) {
+  addUser(roomID, userData) {
     if (!roomID) return;
+    const userID = crypto.randomBytes(10).toString('hex');
 
     const user = {
       ID: userID,
@@ -67,6 +73,8 @@ class PokerRooms {
     };
 
     this.rooms[roomID].users[userID] = user;
+
+    return userID;
   }
 
   deleteUser(roomID, userID) {
