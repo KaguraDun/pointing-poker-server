@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
   console.log('User connected', socket.id);
 
   socket.on(RoomEvents.CREATE_ROOM, (dealerData) => {
-    const roomData = pokerRooms.create(dealerData, socket.id);
+    const roomData = pokerRooms.create(dealerData);
     io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
   });
 
@@ -44,15 +44,16 @@ io.on('connection', (socket) => {
     io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
   });
 
-  socket.on(UserEvents.ADD_USER_FROM_CLIENT, ({ userData, roomID }) => {
-    const userID = socket.id;
-    pokerRooms.addUser(userData, userID, roomID);
+  socket.on(UserEvents.ADD_USER_FROM_CLIENT, ({ roomID, userData }) => {
+    const userID = pokerRooms.addUser(roomID, userData);
     io.emit(RoomEvents.USER_CONNECTED, { roomID, userID });
   });
 
   socket.on(RoomEvents.GET_ROOM_FROM_CLIENT, (roomID) => {
     const roomData = pokerRooms.getRoomData(roomID);
     io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
+
+    console.log(`${roomID} sent to client`);
   });
 
   socket.on(RoomEvents.SET_ROOM_MESSAGE_FROM_CLIENT, ({ roomID, text }) => {
