@@ -3,6 +3,7 @@ import cors from 'cors';
 import { Server } from 'socket.io';
 import path from 'path';
 import morgan from 'morgan';
+import crypto from 'crypto';
 import ChatEvents from './events/chat';
 import RoomEvents from './events/room';
 import PokerRooms from './PokerRooms';
@@ -86,17 +87,21 @@ io.on('connection', (socket) => {
     pokerRooms.deleteIssue(roomID, issueID);
   });
 
-  let messageKey = 0;
+  socket.on(
+    ChatEvents.SEND_MESSAGE_FROM_CLIENT,
+    ({ roomID, userID, messageText }) => {
+      const messageID = crypto.randomBytes(5).toString('hex');
 
-  socket.on(ChatEvents.SEND_MESSAGE_FROM_CLIENT, (messageText) => {
-    messageKey += 1;
+      io.emit(ChatEvents.GET_MESSAGE_FROM_SERVER, {
+        ID: messageID,
+        roomID,
+        userID: userID,
+        text: messageText,
+      });
 
-    io.emit(ChatEvents.GET_MESSAGE_FROM_SERVER, {
-      messageID: messageKey,
-      text: messageText,
-      userID: socket.id,
-    });
-  });
+      console.log(`User ${userID} in room ${roomID} send message`);
+    }
+  );
 
   socket.on('disconnect', () => {
     console.log('User disconnected', socket.id);
