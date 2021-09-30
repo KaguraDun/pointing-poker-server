@@ -17,12 +17,12 @@ class PokerRooms {
       issues: {},
       settings: {
         dealerAsPlayer: false,
-        decks: [
-          { name: 'Popular', values: DECK_POPULAR },
-          { name: 'Fibonacci', values: DECK_FIBONACCI },
-          { name: 'Power of two', values: DECK_POWER_OF_TWO },
-        ],
-        currentDeck: 'Fibonacci',
+        decks: {
+          popular: { name: 'Popular', values: DECK_POPULAR },
+          fibonacci: { name: 'Fibonacci', values: DECK_FIBONACCI },
+          powerOfTwo: { name: 'Power of two', values: DECK_POWER_OF_TWO },
+        },
+        currentDeck: 'fibonacci',
         newPlayersJoinWithAdmit: true,
         autoTurnOver: true,
         enableTimer: true,
