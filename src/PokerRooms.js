@@ -29,7 +29,10 @@ class PokerRooms {
         roundDurationSeconds: 60,
       },
       message: '',
-      isStarted: false,
+      game: {
+        isStarted: false,
+        currentIssueID: null,
+      },
     };
     this.rooms[roomID] = roomData;
 
@@ -92,13 +95,19 @@ class PokerRooms {
   startGame(roomID) {
     if (!roomID) return;
 
-    this.rooms[roomID].isStarted = true;
+    this.rooms[roomID].game.isStarted = true;
   }
 
   updateSettings(roomID, newSettings) {
     if (!roomID) return;
 
     Object.assign(this.rooms[roomID]?.settings, newSettings);
+  }
+
+  updateGameState(roomID, newGameState) {
+    if (!roomID) return;
+
+    Object.assign(this.rooms[roomID]?.game, newGameState);
   }
 
   addIssue(roomID, issue) {
