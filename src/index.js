@@ -70,6 +70,12 @@ io.on('connection', (socket) => {
     io.emit(RoomEvents.GAME_BEGUN, roomID);
   });
 
+  socket.on(RoomEvents.UPDATE_GAME_STATE, ({ roomID, newGameState }) => {
+    pokerRooms.updateGameState(roomID, newGameState);
+
+    console.log(`room:${roomID} game state updated`);
+  });
+
   socket.on(RoomEvents.CLOSE_ROOM, (roomID) => {
     pokerRooms.close(roomID);
     io.emit(RoomEvents.ROOM_CLOSED, roomID);

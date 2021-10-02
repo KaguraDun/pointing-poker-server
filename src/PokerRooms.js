@@ -14,22 +14,32 @@ class PokerRooms {
       ID: roomID,
       owner: '',
       users: {},
-      issues: {},
+      issues: {
+        1: {
+          title: 'problemo',
+          link: 'problemo',
+          priority: 'medium',
+        },
       settings: {
         dealerAsPlayer: false,
-        decks: [
-          { name: 'Popular', values: DECK_POPULAR },
-          { name: 'Fibonacci', values: DECK_FIBONACCI },
-          { name: 'Power of two', values: DECK_POWER_OF_TWO },
-        ],
-        currentDeck: 'Fibonacci',
+        decks: {
+          popular: { name: 'Popular', values: DECK_POPULAR },
+          fibonacci: { name: 'Fibonacci', values: DECK_FIBONACCI },
+          powerOfTwo: { name: 'Power of two', values: DECK_POWER_OF_TWO },
+        },
+        currentDeck: 'fibonacci',
         newPlayersJoinWithAdmit: true,
         autoTurnOver: true,
         enableTimer: true,
         roundDurationSeconds: 60,
       },
       message: '',
-      isStarted: false,
+      game: {
+        isStarted: false,
+        currentIssueID: null,
+        isTimerStart: false,
+        roundTime: null,
+      },
     };
     this.rooms[roomID] = roomData;
 
@@ -92,13 +102,19 @@ class PokerRooms {
   startGame(roomID) {
     if (!roomID) return;
 
-    this.rooms[roomID].isStarted = true;
+    this.rooms[roomID].game.isStarted = true;
   }
 
   updateSettings(roomID, newSettings) {
     if (!roomID) return;
 
     Object.assign(this.rooms[roomID]?.settings, newSettings);
+  }
+
+  updateGameState(roomID, newGameState) {
+    if (!roomID) return;
+
+    Object.assign(this.rooms[roomID]?.game, newGameState);
   }
 
   addIssue(roomID, issue) {
