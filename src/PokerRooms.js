@@ -14,7 +14,6 @@ class PokerRooms {
       ID: roomID,
       owner: '',
       users: {},
-      issues: {},
       issues: {
         1: {
           title: 'problemo',
