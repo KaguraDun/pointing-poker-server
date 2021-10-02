@@ -15,6 +15,12 @@ class PokerRooms {
       owner: '',
       users: {},
       issues: {},
+      issues: {
+        1: {
+          title: 'problemo',
+          link: 'problemo',
+          priority: 'medium',
+        },
       settings: {
         dealerAsPlayer: false,
         decks: {
@@ -32,6 +38,8 @@ class PokerRooms {
       game: {
         isStarted: false,
         currentIssueID: null,
+        isTimerStart: false,
+        roundTime: null,
       },
     };
     this.rooms[roomID] = roomData;
