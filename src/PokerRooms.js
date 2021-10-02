@@ -20,6 +20,7 @@ class PokerRooms {
           link: 'problemo',
           priority: 'medium',
         },
+      },
       settings: {
         dealerAsPlayer: false,
         decks: {
