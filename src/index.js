@@ -31,13 +31,17 @@ io.on('connection', (socket) => {
   socket.on(RoomEvents.CREATE_ROOM, (dealerData) => {
     const roomData = pokerRooms.create(dealerData);
     io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
+
+    console.log(`user:${roomData.owner} create room:${roomData.ID}`);
   });
 
   socket.on(RoomEvents.GET_ROOM_STATUS_FROM_CLIENT, (roomID) => {
+    const isRoomExist = pokerRooms.checkIfRoomExist(roomID);
     io.emit(
       RoomEvents.GET_ROOM_STATUS_FROM_SERVER,
-      pokerRooms.checkIfRoomExist(roomID)
+      isRoomExist
     );
+    console.log(`room:${roomID} status is`+ (isRoomExist ? 'exist': 'not exist'));
   });
 
   socket.on(RoomEvents.CONNECT_TO_ROOM, (roomID) => {
@@ -48,49 +52,55 @@ io.on('connection', (socket) => {
   socket.on(UserEvents.ADD_USER_FROM_CLIENT, ({ roomID, userData }) => {
     const userID = pokerRooms.addUser(roomID, userData);
     io.emit(RoomEvents.USER_CONNECTED, { roomID, userID });
+    console.log(`user:${userID} added to ${roomID}`);
   });
 
   socket.on(RoomEvents.GET_ROOM_FROM_CLIENT, (roomID) => {
     const roomData = pokerRooms.getRoomData(roomID);
     io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
-
-    console.log(`${roomID} sent to client`);
+    console.log(`room:${roomID} sent to client`);
   });
 
   socket.on(RoomEvents.SET_ROOM_MESSAGE_FROM_CLIENT, ({ roomID, text }) => {
     pokerRooms.changeMessage(roomID, text);
+    console.log(`room:${roomID} set message`);
   });
 
   socket.on(RoomEvents.DISCONNECT_FROM_ROOM, ({ roomID, userID }) => {
     pokerRooms.deleteUser(roomID, userID);
+    console.log(`user:${userID} disconnected from room:${roomID}`)
   });
 
   socket.on(RoomEvents.START_GAME, (roomID) => {
     pokerRooms.startGame(roomID);
     io.emit(RoomEvents.GAME_BEGUN, roomID);
+    console.log(`room:${roomID} game started`)
   });
 
   socket.on(RoomEvents.UPDATE_GAME_STATE, ({ roomID, newGameState }) => {
     pokerRooms.updateGameState(roomID, newGameState);
-
     console.log(`room:${roomID} game state updated`);
   });
 
   socket.on(RoomEvents.CLOSE_ROOM, (roomID) => {
     pokerRooms.close(roomID);
     io.emit(RoomEvents.ROOM_CLOSED, roomID);
+    console.log(`room:${roomID} closed`)
   });
 
   socket.on(RoomEvents.UPDATE_SETTINGS, ({ roomID, newSettings }) => {
     pokerRooms.updateSettings(roomID, newSettings);
+    console.log(`room:${roomID} settings updated`)
   });
 
   socket.on(RoomEvents.ADD_ISSUE, ({ roomID, issue }) => {
     pokerRooms.addIssue(roomID, issue);
+    console.log(`room:${roomID} issue:${issue.id} added`)
   });
 
   socket.on(RoomEvents.DELETE_ISSUE, ({ roomID, issueID }) => {
     pokerRooms.deleteIssue(roomID, issueID);
+    console.log(`room:${roomID} issue:${issueID} deleted`)
   });
 
   socket.on(
@@ -105,7 +115,7 @@ io.on('connection', (socket) => {
         text: messageText,
       });
 
-      console.log(`User ${userID} in room ${roomID} send message`);
+      console.log(`room:${roomID} user:${userID} sent message`);
     }
   );
 
