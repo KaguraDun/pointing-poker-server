@@ -120,17 +120,17 @@ class PokerRooms {
     nestedObjectAssign(this.rooms[roomID]?.game, newGameState);
   }
 
-  addIssue(roomID, issue) {
+  addIssue(roomID, issueData) {
     if (!roomID) return;
-
+    console.log(issueData);
     const issueID = crypto.randomBytes(5).toString('hex');
 
-    const issueData = {
-      ...issue,
+    const issue = {
+      ...issueData,
       ID: issueID,
     };
 
-    this.rooms[roomID].issues[issueID] = issueData;
+    this.rooms[roomID].issues[issueID] = issue;
   }
 
   deleteIssue(roomID, issueID) {

@@ -93,9 +93,9 @@ io.on('connection', (socket) => {
     console.log(`room:${roomID} settings updated`)
   });
 
-  socket.on(RoomEvents.ADD_ISSUE, ({ roomID, issue }) => {
-    pokerRooms.addIssue(roomID, issue);
-    console.log(`room:${roomID} issue:${issue.id} added`)
+  socket.on(RoomEvents.ADD_ISSUE, ({ roomID, issueData }) => {
+    pokerRooms.addIssue(roomID, issueData);
+    console.log(`room:${roomID} issue added`)
   });
 
   socket.on(RoomEvents.DELETE_ISSUE, ({ roomID, issueID }) => {
