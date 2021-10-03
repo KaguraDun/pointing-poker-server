@@ -98,6 +98,11 @@ io.on('connection', (socket) => {
     console.log(`room:${roomID} issue added`)
   });
 
+  socket.on(RoomEvents.EDIT_ISSUE, ({ roomID, issueID, issueData }) => {
+    pokerRooms.editIssue(roomID, issueID, issueData);
+    console.log(`room:${roomID} issue:${issueID} edited`)
+  });
+
   socket.on(RoomEvents.DELETE_ISSUE, ({ roomID, issueID }) => {
     pokerRooms.deleteIssue(roomID, issueID);
     console.log(`room:${roomID} issue:${issueID} deleted`)

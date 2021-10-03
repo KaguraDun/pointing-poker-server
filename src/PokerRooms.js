@@ -21,6 +21,16 @@ class PokerRooms {
           link: 'problemo',
           priority: 'medium',
         },
+        2: {
+          title: 'problemo',
+          link: 'problemo',
+          priority: 'medium',
+        },
+        3: {
+          title: 'problemo',
+          link: 'problemo',
+          priority: 'medium',
+        },
       },
       settings: {
         dealerAsPlayer: false,
@@ -122,7 +132,7 @@ class PokerRooms {
 
   addIssue(roomID, issueData) {
     if (!roomID) return;
-    console.log(issueData);
+
     const issueID = crypto.randomBytes(5).toString('hex');
 
     const issue = {
@@ -131,6 +141,12 @@ class PokerRooms {
     };
 
     this.rooms[roomID].issues[issueID] = issue;
+  }
+
+  editIssue(roomID, issueID, issueData){
+    if (!roomID && !issueID) return;
+
+    this.rooms[roomID].issues[issueID] = issueData;
   }
 
   deleteIssue(roomID, issueID) {
