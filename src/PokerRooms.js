@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import DECK_FIBONACCI from './models/deck-fibonacci';
 import DECK_POPULAR from './models/deck-popular';
 import DECK_POWER_OF_TWO from './models/deck-power-of-two';
+import nestedObjectAssign from 'nested-object-assign';
 
 class PokerRooms {
   constructor() {
@@ -37,6 +38,7 @@ class PokerRooms {
       message: '',
       game: {
         isStarted: false,
+        isEnded: false,
         currentIssueID: null,
         isTimerStart: false,
         roundTime: null,
@@ -115,7 +117,7 @@ class PokerRooms {
   updateGameState(roomID, newGameState) {
     if (!roomID) return;
 
-    Object.assign(this.rooms[roomID]?.game, newGameState);
+    nestedObjectAssign(this.rooms[roomID]?.game, newGameState);
   }
 
   addIssue(roomID, issue) {
