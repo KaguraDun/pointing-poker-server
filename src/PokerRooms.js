@@ -3,6 +3,8 @@ import DECK_FIBONACCI from './models/deck-fibonacci';
 import DECK_POPULAR from './models/deck-popular';
 import DECK_POWER_OF_TWO from './models/deck-power-of-two';
 import nestedObjectAssign from 'nested-object-assign';
+import fs from 'fs';
+import path from 'path';
 
 class PokerRooms {
   constructor() {
@@ -85,10 +87,16 @@ class PokerRooms {
   addUser(roomID, userData) {
     if (!roomID) return;
     const userID = crypto.randomBytes(10).toString('hex');
+    if (userData.image) {
+      const buffer = Buffer.from(userData.image, 'base64');
+      fs.writeFileSync(path.resolve(`public/${userID}.png`), buffer, (err) => {
+        if (err) throw err;
+      });
+    }
 
     const user = {
       ID: userID,
-      image: userData.image,
+      image: userData.image ? `${userID}.png` : null,
       name: userData.name,
       surname: userData.surname,
       position: userData.position,
@@ -143,7 +151,7 @@ class PokerRooms {
     this.rooms[roomID].issues[issueID] = issue;
   }
 
-  editIssue(roomID, issueID, issueData){
+  editIssue(roomID, issueID, issueData) {
     if (!roomID && !issueID) return;
 
     this.rooms[roomID].issues[issueID] = issueData;
