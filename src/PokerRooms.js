@@ -3,8 +3,6 @@ import DECK_FIBONACCI from './models/deck-fibonacci';
 import DECK_POPULAR from './models/deck-popular';
 import DECK_POWER_OF_TWO from './models/deck-power-of-two';
 import nestedObjectAssign from 'nested-object-assign';
-import fs from 'fs';
-import path from 'path';
 
 class PokerRooms {
   constructor() {
@@ -17,23 +15,7 @@ class PokerRooms {
       ID: roomID,
       owner: '',
       users: {},
-      issues: {
-        1: {
-          title: 'problemo',
-          link: 'problemo',
-          priority: 'medium',
-        },
-        2: {
-          title: 'problemo',
-          link: 'problemo',
-          priority: 'medium',
-        },
-        3: {
-          title: 'problemo',
-          link: 'problemo',
-          priority: 'medium',
-        },
-      },
+      issues: {},
       settings: {
         dealerAsPlayer: false,
         decks: {
