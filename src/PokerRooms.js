@@ -15,23 +15,7 @@ class PokerRooms {
       ID: roomID,
       owner: '',
       users: {},
-      issues: {
-        1: {
-          title: 'problemo',
-          link: 'problemo',
-          priority: 'medium',
-        },
-        2: {
-          title: 'problemo',
-          link: 'problemo',
-          priority: 'medium',
-        },
-        3: {
-          title: 'problemo',
-          link: 'problemo',
-          priority: 'medium',
-        },
-      },
+      issues: {},
       settings: {
         dealerAsPlayer: false,
         decks: {
@@ -88,7 +72,7 @@ class PokerRooms {
 
     const user = {
       ID: userID,
-      image: userData.image,
+      image: userData.image || null,
       name: userData.name,
       surname: userData.surname,
       position: userData.position,
