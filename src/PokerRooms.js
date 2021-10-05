@@ -89,7 +89,7 @@ class PokerRooms {
     const userID = crypto.randomBytes(10).toString('hex');
     if (userData.image) {
       const buffer = Buffer.from(userData.image, 'base64');
-      fs.writeFileSync(path.resolve(`public/${userID}.png`), buffer, (err) => {
+      fs.writeFileSync(path.resolve(`tmp/${userID}.png`), buffer, (err) => {
         if (err) throw err;
       });
     }
