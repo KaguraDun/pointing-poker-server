@@ -127,7 +127,7 @@ class PokerRooms {
     this.rooms[roomID].issues[issueID] = issue;
   }
 
-  editIssue(roomID, issueID, issueData) {
+  editIssue(roomID, issueID, issueData){
     if (!roomID && !issueID) return;
 
     this.rooms[roomID].issues[issueID] = issueData;
