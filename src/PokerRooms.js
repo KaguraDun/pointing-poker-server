@@ -17,6 +17,7 @@ class PokerRooms {
       users: {},
       issues: {},
       settings: {
+        message: '',
         dealerAsPlayer: true,
         decks: {
           popular: { name: 'Popular', values: DECK_POPULAR },
