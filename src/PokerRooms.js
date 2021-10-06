@@ -17,7 +17,7 @@ class PokerRooms {
       users: {},
       issues: {},
       settings: {
-        dealerAsPlayer: false,
+        dealerAsPlayer: true,
         decks: {
           popular: { name: 'Popular', values: DECK_POPULAR },
           fibonacci: { name: 'Fibonacci', values: DECK_FIBONACCI },
@@ -127,7 +127,7 @@ class PokerRooms {
     this.rooms[roomID].issues[issueID] = issue;
   }
 
-  editIssue(roomID, issueID, issueData){
+  editIssue(roomID, issueID, issueData) {
     if (!roomID && !issueID) return;
 
     this.rooms[roomID].issues[issueID] = issueData;
@@ -137,6 +137,7 @@ class PokerRooms {
     if (!roomID) return;
 
     delete this.rooms[roomID].issues[issueID];
+    delete this.rooms[roomID].game?.roundHistory?.[issueID];
   }
 }
 export default PokerRooms;
