@@ -20,17 +20,20 @@ app
 const server = app.listen(port, () => {
   console.log('Server run at ' + port);
 });
-
 const io = new Server(server);
-
 const pokerRooms = new PokerRooms();
 
 io.on('connection', (socket) => {
   console.log('User connected', socket.id);
 
+  socket.on(RoomEvents.RECONNECT_TO_ROOM, (roomID) => {
+    socket.join(roomID);
+  });
+
   socket.on(RoomEvents.CREATE_ROOM, (dealerData) => {
     const roomData = pokerRooms.create(dealerData);
-    io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
+    socket.join(roomData.ID);
+    io.to(roomData.ID).emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
 
     console.log(`user:${roomData.owner} create room:${roomData.ID}`);
   });
@@ -45,18 +48,19 @@ io.on('connection', (socket) => {
 
   socket.on(RoomEvents.CONNECT_TO_ROOM, (roomID) => {
     const roomData = pokerRooms.getRoomData(roomID);
-    io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
+    socket.join(roomID);
+    io.to(roomID).emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
   });
 
   socket.on(UserEvents.ADD_USER_FROM_CLIENT, ({ roomID, userData }) => {
     const userID = pokerRooms.addUser(roomID, userData);
-    io.emit(RoomEvents.USER_CONNECTED, { roomID, userID });
+    io.to(roomID).emit(RoomEvents.USER_CONNECTED, { roomID, userID });
     console.log(`user:${userID} added to ${roomID}`);
   });
 
   socket.on(RoomEvents.GET_ROOM_FROM_CLIENT, (roomID) => {
     const roomData = pokerRooms.getRoomData(roomID);
-    io.emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
+    io.to(roomID).emit(RoomEvents.GET_ROOM_FROM_SERVER, roomData);
     console.log(`room:${roomID} sent to client`);
   });
 
@@ -66,14 +70,15 @@ io.on('connection', (socket) => {
   });
 
   socket.on(RoomEvents.DISCONNECT_FROM_ROOM, ({ roomID, userID }) => {
-    pokerRooms.deleteUser(roomID, userID); 
-    io.emit(RoomEvents.USER_DISCONNECTED, { roomID, userID });
+    pokerRooms.deleteUser(roomID, userID);
+    socket.leave(roomID);
+    io.to(roomID).emit(RoomEvents.USER_DISCONNECTED, { roomID, userID });
     console.log(`user:${userID} disconnected from room:${roomID}`);
   });
 
   socket.on(RoomEvents.START_GAME, (roomID) => {
     pokerRooms.startGame(roomID);
-    io.emit(RoomEvents.GAME_BEGUN, roomID);
+    io.to(roomID).emit(RoomEvents.GAME_BEGUN, roomID);
     console.log(`room:${roomID} game started`);
   });
 
@@ -84,7 +89,8 @@ io.on('connection', (socket) => {
 
   socket.on(RoomEvents.CLOSE_ROOM, (roomID) => {
     pokerRooms.close(roomID);
-    io.emit(RoomEvents.ROOM_CLOSED, roomID);
+    io.to(roomID).emit(RoomEvents.ROOM_CLOSED, roomID);
+    io.in(roomID).socketsLeave(roomID);
     console.log(`room:${roomID} closed`);
   });
 
@@ -113,7 +119,7 @@ io.on('connection', (socket) => {
     ({ roomID, userID, messageText }) => {
       const messageID = crypto.randomBytes(5).toString('hex');
 
-      io.emit(ChatEvents.GET_MESSAGE_FROM_SERVER, {
+      io.to(roomID).emit(ChatEvents.GET_MESSAGE_FROM_SERVER, {
         ID: messageID,
         roomID,
         userID: userID,
